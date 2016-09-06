@@ -40,3 +40,72 @@ while GPIO.input(channel) == GPIO.LOW:
 *wait_for_edge()等待边沿方法
 *event_detected()事件检测方法
 *边沿呗检测到时的回调方法
+##wait_for_edge()方法
+wait_for_edge()方法是用来阻断程序的执行，直到它检测出有边沿被触发了。换句话说，上面这个等待按下按钮的离职可以重写成：
+```python
+GPIO.wait_for_edge(channel, GPIO.RISING)
+```
+如果你指向等待一段时间，那可以使用timeout参数：
+```python
+# wait for up to 5 seconds for a rising edge (timeout is in milliseconds)
+channel = GPIO.wait_for_edge(channel, GPIO_RISING, timeout=5000)
+if channel is None:
+    print('Timeout occurred')
+else:
+    print('Edge detected on channel', channel)
+```
+##event_detected()方法
+event_detected()方法跟polling不同，是用其他方式实现的循环，它可以保证在CPU繁忙时不会错过输入的变化。
+这在使用Pygame或者PyQt的时候非常有用，因为这些框架都有一个及时监听和上报给GUI事件的主循环。
+```python
+GPIO.add_event_detect(channel, GPIO.RISING)  # add rising edge detection on a channel
+do_something()
+if GPIO.event_detected(channel):
+    print('Button pressed')
+```
+
+注意，你可以检测GPIO.RISING, GPIO.FALLING or GPIO.BOTH这些事件。
+##螺纹回调（Threaded callbacks）
+RPi.GPIO为回调函数启用了一个新的线程。这就意味着回调函数是和主程序同时运行的，可以立即上报给边沿。例如：
+```python
+def my_callback(channel):
+    print('This is a edge event callback function!')
+    print('Edge detected on channel %s'%channel)
+    print('This is run in a different thread to your main program')
+
+GPIO.add_event_detect(channel, GPIO.RISING, callback=my_callback)  # add rising edge detection on a channel
+...the rest of your program...
+If you wanted more than one callback function:
+def my_callback_one(channel):
+    print('Callback one')
+
+def my_callback_two(channel):
+    print('Callback two')
+
+GPIO.add_event_detect(channel, GPIO.RISING)
+GPIO.add_event_callback(channel, my_callback_one)
+GPIO.add_event_callback(channel, my_callback_two)
+```
+注意，在这种情况下，回调函数是串行而非并行的。因为在回调中只是用了一个线程，这个线程里每个回调都按他们被定义的顺序在运行。
+##开关抖动（Switch debounce）
+You may notice that the callbacks are called more than once for each button press. This is as a result of what is known as 'switch bounce'. There are two ways of dealing with switch bounce:
+你可能也注意到了，每次按钮按下时回调被执行了多次。这就是我们成为开关抖动的原因导致的。
+有两种方式可以处理这种开关抖动：
+
+*在你的开关里，加一个0.1uF的电容
+*软防抖
+*两者结合
+To debounce using software, add the bouncetime= parameter to a function where you specify a callback function. Bouncetime should be specified in milliseconds. For example:
+软件实现防抖动的方式，可以通过在指定的回调函数中添加bouncetime=参数来实现。
+bouncetime参数的单位是毫秒。
+```python
+# add rising edge detection on a channel, ignoring further edges for 200ms for switch bounce handling
+GPIO.add_event_detect(channel, GPIO.RISING, callback=my_callback, bouncetime=200)
+or
+GPIO.add_event_callback(channel, my_callback, bouncetime=200)
+```
+##去除事件检测(Remove event detection)
+如果你的程序因某种原因，不再想做边沿事件检测，可以这样停止：
+```python
+GPIO.remove_event_detect(channel)
+```

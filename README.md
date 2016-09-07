@@ -14,8 +14,9 @@ RPi.GPIO文档翻译
 [Outputs](https://github.com/steptian/RPi.GPIO/blob/master/Outputs.md)
 ##PWM
 脉冲
+
 [PWM](https://github.com/steptian/RPi.GPIO/blob/master/PWM.md)
 ##Checking function of GPIO channels
-检查同道方法列表
+检查通道方法列表
 
 [Checking function of GPIO channels](https://github.com/steptian/RPi.GPIO/blob/master/Checking_function_of_GPIO_channels.md)

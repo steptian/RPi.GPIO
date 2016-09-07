@@ -1,3 +1,4 @@
+https://sourceforge.net/p/raspberry-gpio-python/wiki/PWM/
 ##在RPi.GPIO中使用PWM
 创建一个脉冲实例：
 ```python

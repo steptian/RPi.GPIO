@@ -6,3 +6,5 @@ RPi.GPIO文档翻译
 [Inputs](https://github.com/steptian/RPi.GPIO/blob/master/Inputs.md)
 ##Outputs
 [Outputs](https://github.com/steptian/RPi.GPIO/blob/master/Outputs.md)
+##PWM
+[PWM](https://github.com/steptian/RPi.GPIO/blob/master/PWM.md)

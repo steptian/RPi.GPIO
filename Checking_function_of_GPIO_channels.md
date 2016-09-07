@@ -8,6 +8,6 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 func = GPIO.gpio_function(pin)
 ```
-返回值可以是：
+返回值可以是下面的其中之一：
 
 GPIO.IN, GPIO.OUT, GPIO.SPI, GPIO.I2C, GPIO.HARD_PWM, GPIO.SERIAL, GPIO.UNKNOWN

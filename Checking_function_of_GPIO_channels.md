@@ -1,4 +1,5 @@
 https://sourceforge.net/p/raspberry-gpio-python/wiki/Checking%20function%20of%20GPIO%20channels/
+
 这个函数gpio_function(channel)，可以列出GPIO通道的方法列表
 
 举个例子
